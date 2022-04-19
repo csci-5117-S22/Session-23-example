@@ -1,11 +1,10 @@
 <template>
   <div>
-  <h1> GALLAGROOVATURE and other fake words </h1>
   <span>Add word: </span><input v-model="newWord" placeholder="type a not-word-word" @keyup.enter="addNewWord" />
   <ul v-if="words !== false">
     <li v-for="wordObj in words" :key="wordObj.id">
-      <router-link :to="{ name: 'oneWord', params: { id: wordObj.id }}">{{wordObj.word}}</router-link>
-    </li>
+      <word-comp :word="wordObj" />
+  </li>
   </ul>
   <div v-else>
     LOADING
@@ -15,7 +14,9 @@
 
 <script>
 import { db } from '@/firebaseConfig'
+import WordComp from '@/components/WordComp.vue';
 export default {
+  components: { WordComp },
   name: 'HomeView',
   data: function() {
     return {

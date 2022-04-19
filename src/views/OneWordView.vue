@@ -24,11 +24,18 @@ export default {
             wordObj: db.collection("words").doc(this.id)
         }
     },
-    beforeUpdate: function() {
-        if (this.wordObj === null && !this.deleting) {
-            this.$router.replace({name:'404'})
-        } else if (this.wordObj === null && this.deleting) {
-            this.$router.push({name:'home'})
+    watch: {
+        id: function() {
+            // $bind automatically unbinds the previously bound property
+            this.wordObj = false;
+            this.$bind('wordObj', db.collection("words").doc(this.id), {wait:true})
+        },
+        wordObj: function() {
+            if (this.wordObj === null && !this.deleting) {
+                this.$router.replace({name:'404'})
+            } else if (this.wordObj === null && this.deleting) {
+                this.$router.push({name:'home'})
+            }
         }
     },
     methods: {

@@ -4,9 +4,37 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </nav>
+      <h1 v-if="randomWord"> <word-comp :word="randomWord" /> and other fake words </h1>
+      <h1 v-else> GALLAGROOVATURE and other fake words </h1>
     <router-view/>
   </div>
 </template>
+
+<script>
+import { db } from '@/firebaseConfig'
+import WordComp from './components/WordComp.vue'
+export default {
+    components: { WordComp },
+  data: function() {
+    return {
+      words: false,
+    }
+  },
+  firestore: {
+    words: db.collection("words")
+  },
+  computed: {
+    randomWord: function() {
+      if (this.words) {
+        return this.words[Math.floor(Math.random()*this.words.length)]
+      } else {
+        return false
+      }
+    }
+  }
+}
+</script>
+
 
 <style>
 #app {
