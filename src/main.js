@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import { firestorePlugin } from 'vuefire'
-import { auth } from '@/firebaseConfig.js'
+import { auth, provider } from '@/firebaseConfig.js'
 
 Vue.use(firestorePlugin)
 
@@ -12,8 +12,11 @@ Vue.config.productionTip = false
 // 2 we want to add a auth listener
 
 let app
-auth.onAuthStateChanged(()=>{
-    if (!app) {
+auth.onAuthStateChanged((user)=>{
+    if (!user) {
+        auth.signInWithRedirect(provider);
+    }
+    if (user && !app) {
         new Vue({
             router,
             render: h => h(App)
